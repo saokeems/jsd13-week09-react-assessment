@@ -2,6 +2,35 @@ import { useState } from "react";
 
 const Home = () => {
   const [section, setSection] = useState("normal");
+  const [members, setMembers] = useState([
+    { id: "1", name: "John", lastName: "Doe", position: "Dev" },
+    { id: "2", name: "Jane", lastName: "Doe", position: "Dev" },
+  ]);
+
+  const [formData, setFormData] = useState({
+    name: "",
+    lastName: "",
+    position: "",
+  });
+
+  const handleCreate = (e) => {
+    e.preventDefault();
+
+    if (!formData.name || !formData.lastName || !formData.position) return;
+
+    const newId = crypto.randomUUID();
+
+    setMembers([...members, { ...formData, id: newId }]);
+    setFormData({
+      name: "",
+      lastName: "",
+      position: "",
+    });
+  };
+
+  const handleDelete = (id) => {
+    setMembers(members.filter((member) => member.id !== id));
+  };
 
   return (
     <div className="w-full px-4">
@@ -36,20 +65,32 @@ const Home = () => {
       {section === "admin" && (
         <div className="w-full mb-8">
           <h2 className="text-xl font-bold mb-4">Create User Here</h2>
-          <form className="flex gap-4 w-full">
+          <form onSubmit={handleCreate} className="flex gap-4 w-full">
             <input
               type="text"
               placeholder="Name"
+              value={formData.name}
+              onChange={(e) =>
+                setFormData({ ...formData, name: e.target.value })
+              }
               className="p-2 rounded-md bg-white flex-1"
             />
             <input
               type="text"
               placeholder="Last Name"
+              value={formData.lastName}
+              onChange={(e) =>
+                setFormData({ ...formData, lastName: e.target.value })
+              }
               className="p-2 rounded-md bg-white flex-1"
             />
             <input
               type="text"
               placeholder="Position"
+              value={formData.position}
+              onChange={(e) =>
+                setFormData({ ...formData, position: e.target.value })
+              }
               className="p-2 rounded-md bg-white flex-1"
             />
             <button
@@ -76,18 +117,29 @@ const Home = () => {
               </tr>
             </thead>
             <tbody>
-              <tr className="border-b">
-                <td className="border-r text-center bg-white">Test</td>
-                <td className="border-r text-center bg-white"></td>
-                <td className="border-r text-center bg-white"></td>
-                {section === "admin" && (
+              {members.map((member) => (
+                <tr key={member.id} className="border-b">
                   <td className="border-r text-center bg-white">
-                    <button className="text-red-600 hover:text-red-700">
-                      Delete
-                    </button>
+                    {member.name}
                   </td>
-                )}
-              </tr>
+                  <td className="border-r text-center bg-white">
+                    {member.lastName}
+                  </td>
+                  <td className="border-r text-center bg-white">
+                    {member.position}
+                  </td>
+                  {section === "admin" && (
+                    <td className="border-r text-center bg-white">
+                      <button
+                        onClick={() => handleDelete(member.id)}
+                        className="text-red-600 hover:text-red-700"
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  )}
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
