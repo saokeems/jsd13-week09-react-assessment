@@ -70,6 +70,9 @@ const Home = () => {
                 <th className="border-r text-center bg-gray-200">Name</th>
                 <th className="border-r text-center bg-gray-200">Last Name</th>
                 <th className="border-r text-center bg-gray-200">Position</th>
+                {section === "admin" && (
+                  <th className="border-r text-center bg-gray-200">Action</th>
+                )}
               </tr>
             </thead>
             <tbody>
@@ -77,6 +80,13 @@ const Home = () => {
                 <td className="border-r text-center bg-white">Test</td>
                 <td className="border-r text-center bg-white"></td>
                 <td className="border-r text-center bg-white"></td>
+                {section === "admin" && (
+                  <td className="border-r text-center bg-white">
+                    <button className="text-red-600 hover:text-red-700">
+                      Delete
+                    </button>
+                  </td>
+                )}
               </tr>
             </tbody>
           </table>
