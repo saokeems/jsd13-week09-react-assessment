@@ -11,36 +11,57 @@ export const useMembers = () => {
     position: "",
   });
 
+  const fetchMembers = async () => {
+    try {
+      const res = await fetch(API_URL);
+      const data = await res.json();
+      setMembers(data);
+    } catch (error) {
+      console.log("Error fetching:", error);
+    }
+  };
+
   useEffect(() => {
-    const fetchMembers = async () => {
-      try {
-        const res = await fetch(API_URL);
-        const data = await res.json();
-        setMembers(data);
-        console.log(data);
-      } catch (error) {
-        console.log("Error fetching:", error);
-      }
-    };
     fetchMembers();
   }, []);
 
-  const handleCreate = (e) => {
+  const handleCreate = async (e) => {
     e.preventDefault();
 
     if (!formData.name || !formData.lastName || !formData.position) return;
 
-    const newId = crypto.randomUUID();
+    try {
+      const res = await fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
 
-    setMembers([...members, { ...formData, id: newId }]);
-    setFormData({
-      name: "",
-      lastName: "",
-      position: "",
-    });
+      if (res.ok) {
+        setFormData({
+          name: "",
+          lastName: "",
+          position: "",
+        });
+        fetchMembers();
+      }
+    } catch (error) {
+      console.log("Error creating:", error);
+    }
   };
 
-  const handleDelete = (id) => {
+  const handleDelete = async (id) => {
+    try {
+      const res = await fetch(`${API_URL}/${id}`, {
+        method: "DELETE",
+      });
+
+      if (res.ok) {
+        fetchMembers();
+      }
+    } catch (error) {
+      console.log("Error deleting:", error);
+    }
     setMembers(members.filter((member) => member.id !== id));
   };
 

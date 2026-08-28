@@ -1,6 +1,11 @@
 const MemberTable = ({ section, members, handleDelete }) => {
   return (
     <div className="w-full max-w-2xl mx-auto">
+      <div className="flex items-center text-lg">
+        <p className=" font-semibold mb-2">
+          จำนวนสมาชิกทั้งหมด :<span className="text-blue-600"> {members.length}</span>
+        </p>
+      </div>
       <table className="w-full border bg-white shadow-sm table-fixed">
         <thead>
           <tr className="border-b">
