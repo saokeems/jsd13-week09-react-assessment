@@ -1,17 +1,29 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
+const API_URL = "https://6a9132b07751d35ce47e45ca.mockapi.io/members";
 
 const Home = () => {
   const [section, setSection] = useState("normal");
-  const [members, setMembers] = useState([
-    { id: "1", name: "John", lastName: "Doe", position: "Dev" },
-    { id: "2", name: "Jane", lastName: "Doe", position: "Dev" },
-  ]);
-
+  const [members, setMembers] = useState([]);
   const [formData, setFormData] = useState({
     name: "",
     lastName: "",
     position: "",
   });
+
+  useEffect(() => {
+    const fetchMembers = async () => {
+      try {
+        const res = await fetch(API_URL);
+        const data = await res.json();
+        setMembers(data);
+        console.log(data);
+      } catch (error) {
+        console.log("Error fetching:", error);
+      }
+    };
+    fetchMembers();
+  }, []);
 
   const handleCreate = (e) => {
     e.preventDefault();
