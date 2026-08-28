@@ -2,16 +2,13 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Layout from "./components/Layout";
 import Home from "./pages/Home";
 import Owner from "./pages/Owner";
+import NotFoundPage from "./pages/NotFoundPage";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Layout />,
-    errorElement: (
-      <div>
-        <h1>404 not found</h1>
-      </div>
-    ),
+    errorElement: <NotFoundPage />,
     children: [
       { path: "/", element: <Home /> },
       { path: "owner", element: <Owner /> },
